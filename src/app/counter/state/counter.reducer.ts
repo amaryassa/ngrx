@@ -5,8 +5,8 @@ import {
   customIncrement,
   changeChannelName,
 } from './counter.actions';
-import { initialState } from './counter.state';
-import { createReducer, on } from '@ngrx/store';
+import { CounterState, initialState } from './counter.state';
+import { Action, createReducer, on } from '@ngrx/store';
 
 const _counterReducer = createReducer(
   initialState,
@@ -42,7 +42,10 @@ const _counterReducer = createReducer(
   })
 );
 
-export function counterReducer(state: any, action: any) {
+export function counterReducer(
+  state: CounterState | undefined,
+  action: Action
+) {
   console.log('action', action);
 
   return _counterReducer(state, action);
