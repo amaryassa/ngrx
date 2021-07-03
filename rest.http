@@ -1,0 +1,17 @@
+###GET POST
+
+GET http://localhost:3000/posts
+Content-Type: application/json
+
+{
+
+}
+
+###Add POST
+POST http://localhost:3000/posts
+Content-Type: application/json
+
+{
+      "title": "titre 11",
+      "description": "description 11"
+}
