@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Post } from 'src/app/models/Post.model';
-import { AppStore } from '../../store/app.state';
+import { AppState } from '../../store/app.state';
 import { addPost } from '../state/posts.actions';
 
 @Component({
@@ -13,19 +13,10 @@ import { addPost } from '../state/posts.actions';
 export class AddPostComponent implements OnInit {
   postForm: FormGroup;
 
-  constructor(private store: Store<AppStore>) {}
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.postForm = new FormGroup({
-      title: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(6),
-      ]),
-      description: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(10),
-      ]),
-    });
+    this.createForm();
   }
 
   showDescriptionErrors(): String | void {
@@ -51,5 +42,17 @@ export class AddPostComponent implements OnInit {
       description: this.postForm.value.description,
     };
     this.store.dispatch(addPost({ post }));
+  }
+  createForm() {
+    this.postForm = new FormGroup({
+      title: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(6),
+      ]),
+      description: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(10),
+      ]),
+    });
   }
 }

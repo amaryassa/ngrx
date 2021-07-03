@@ -3,7 +3,7 @@ import { PostsState } from '../posts/state/posts.state';
 import { postsReducer } from '../posts/state/posts.reducer';
 import { counterReducer } from '../counter/state/counter.reducer';
 
-export interface AppStore {
+export interface AppState {
   counter: CounterState;
   posts: PostsState;
 }
