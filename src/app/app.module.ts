@@ -12,9 +12,17 @@ import { environment } from '../environments/environment.prod';
 import { LoginComponent } from './auth/login/login.component';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
+import { LoadingComponent } from './shared/components/loading/loading.component';
+import { appReducer } from './store/app.state';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, HomeComponent, LoginComponent],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    HomeComponent,
+    LoginComponent,
+    LoadingComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -22,7 +30,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     FormsModule,
     EffectsModule.forRoot([]),
-    StoreModule.forRoot({}),
+    StoreModule.forRoot(appReducer),
     StoreDevtoolsModule.instrument({
       logOnly: environment.production,
     }),

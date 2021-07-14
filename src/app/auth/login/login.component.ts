@@ -5,6 +5,7 @@ import { AppState } from '../../store/app.state';
 import { loginStart } from '../state/auth.actions';
 import { fromEvent, interval } from 'rxjs';
 import { exhaustMap, take } from 'rxjs/operators';
+import { setLoader } from '../../store/shared/shared.actions';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -21,7 +22,7 @@ export class LoginComponent implements OnInit {
   onLoginSubmit() {
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
-
+    this.store.dispatch(setLoader({ status: true }));
     this.store.dispatch(loginStart({ email, password }));
   }
   // convenience getter for easy access to form fields

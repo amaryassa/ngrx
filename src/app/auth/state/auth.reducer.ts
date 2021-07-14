@@ -5,8 +5,8 @@ import { loginSuccess } from './auth.actions';
 const _authReducer = createReducer(
   initialState,
   on(loginSuccess, (state, action) => {
-    console.log('state', state);
-    console.log('action', action);
+    // console.log('state', state);
+    // console.log('action', action);
     return {
       ...state,
       user: action.user,

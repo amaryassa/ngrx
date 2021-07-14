@@ -21,7 +21,10 @@ export class AuthService {
           returnSecureToken: true,
         }
       )
-      .pipe(map((data) => this.formatUser(data)));
+      .pipe(
+        delay(3000),
+        map((data) => this.formatUser(data))
+      );
     // return of('request data base').pipe(delay(3000));
     // return of('requet data base');
   }
