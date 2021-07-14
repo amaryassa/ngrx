@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { CustomCounterInputComponent } from './custom-counter-input/custom-counter-input.component';
 import { StoreModule } from '@ngrx/store';
 import { counterReducer } from './state/counter.reducer';
-import { COUNT_STATE_NAME } from './state/counter.selectors';
+import { COUNT_STATE_NAME } from './state/counter.selector';
 
 const routes: Routes = [
   {

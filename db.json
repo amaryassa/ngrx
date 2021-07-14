@@ -55,5 +55,6 @@
       "description": "description 11",
       "id": 11
     }
-  ]
+  ],
+  "counter": { "counter": 0 }
 }

@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import { Observable, of } from 'rxjs';
 import { Post } from 'src/app/models/Post.model';
-import { getCount, getPosts } from '../state/posts.selectors';
+import { getCount, getPosts } from '../state/posts.selector';
 import { deletePost } from '../state/posts.actions';
 
 @Component({

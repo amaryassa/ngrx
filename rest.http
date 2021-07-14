@@ -15,3 +15,12 @@ Content-Type: application/json
       "title": "titre 11",
       "description": "description 11"
 }
+###GET counter
+
+GET http://localhost:3000/counter
+Content-Type: application/json
+
+{
+
+}
+

@@ -7,7 +7,7 @@ import { EditPostComponent } from './edit-post/edit-post.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StoreModule } from '@ngrx/store';
 import { postsReducer } from './state/posts.reducer';
-import { POST_STATE_NAME } from './state/posts.selectors';
+import { POST_STATE_NAME } from './state/posts.selector';
 
 const routes: Routes = [
   {

@@ -1,7 +1,7 @@
 import { CounterState } from './counter.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 
-export const COUNT_STATE_NAME = 'counter';
+export const COUNT_STATE_NAME = 'counterState';
 //le nom du reducer qui est dans module.ts
 const getCounterState = createFeatureSelector<CounterState>(COUNT_STATE_NAME);
 
