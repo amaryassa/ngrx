@@ -1,7 +1,16 @@
 import { environment } from './../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { takeUntil, timeout, timer, delay, of, Observable, map } from 'rxjs';
+import {
+  takeUntil,
+  timeout,
+  timer,
+  delay,
+  of,
+  Observable,
+  map,
+  tap,
+} from 'rxjs';
 import { AuthResponseData } from '../models/AuthResponseData.model';
 import { User } from '../models/user.model';
 
@@ -11,7 +20,7 @@ import { User } from '../models/user.model';
 export class AuthService {
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string): Observable<User> {
+  login(email: string, password: string): Observable<AuthResponseData> {
     return this.http
       .post<AuthResponseData>(
         `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.FIRBASE_API_KEY}`,
@@ -22,8 +31,8 @@ export class AuthService {
         }
       )
       .pipe(
-        delay(3000),
-        map((data) => this.formatUser(data))
+        delay(3000)
+        // tap((data) => console.log(data))
       );
     // return of('request data base').pipe(delay(3000));
     // return of('requet data base');
@@ -40,5 +49,18 @@ export class AuthService {
       expirationDate
     );
     return user;
+  }
+
+  getErrorMessage(message: string) {
+    switch (message) {
+      case 'EMAIL_NOT_FOUND':
+        return 'Email not found.';
+      case 'INVALID_PASSWORD':
+        return 'invalid password.';
+      case 'USER_DISABLED':
+        return 'User disabled.';
+      default:
+        return 'Unkonown error occured. Please try again';
+    }
   }
 }
