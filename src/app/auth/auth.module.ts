@@ -6,6 +6,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './state/auth.effects';
+import { SignupComponent } from './signup/signup.component';
 
 const routes: Routes = [
   {
@@ -13,11 +14,12 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'login' },
       { path: 'login', component: LoginComponent },
+      { path: 'signup', component: SignupComponent },
     ],
   },
 ];
 @NgModule({
-  declarations: [],
+  declarations: [LoginComponent, SignupComponent],
   imports: [
     CommonModule,
     FormsModule,

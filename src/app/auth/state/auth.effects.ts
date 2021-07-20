@@ -1,7 +1,12 @@
 import { AuthService } from './../../services/auth.service';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { loginStart, loginSuccess, loginFail } from './auth.actions';
+import {
+  loginStart,
+  loginSuccess,
+  signupStart,
+  signupSuccess,
+} from './auth.actions';
 import { exhaustMap, map, mergeMap, delay, catchError, of, tap } from 'rxjs';
 import { AuthResponseData } from '../../models/AuthResponseData.model';
 import { Store } from '@ngrx/store';
@@ -28,7 +33,6 @@ export class AuthEffects {
             this.store.dispatch(setLoader({ status: false }));
             const user = this.authService.formatUser(data);
             return loginSuccess({ user });
-            // return loginFail();
           }),
           catchError((errorResponse) => {
             const errorMessage = this.authService.getErrorMessage(
@@ -41,10 +45,33 @@ export class AuthEffects {
     );
   });
 
-  loginRedirect$ = createEffect(
+  signup$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(signupStart),
+      exhaustMap((action) => {
+        console.log('jsk signup');
+        return this.authService.signup(action.email, action.password).pipe(
+          // delay(3000),
+          map((data) => {
+            this.store.dispatch(setLoader({ status: false }));
+            const user = this.authService.formatUser(data);
+            return signupSuccess({ user });
+          }),
+          catchError((errorResponse) => {
+            const errorMessage = this.authService.getErrorMessage(
+              errorResponse?.error?.error?.message
+            );
+            return of(setErrorMessage({ message: errorMessage }));
+          })
+        );
+      })
+    );
+  });
+
+  loginSignupRedirect$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(loginSuccess),
+        ofType(...[loginSuccess, signupSuccess]),
         tap((action) => {
           this.router.navigate(['/']);
         })

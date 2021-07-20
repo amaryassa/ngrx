@@ -37,6 +37,23 @@ export class AuthService {
     // return of('request data base').pipe(delay(3000));
     // return of('requet data base');
   }
+  signup(email: string, password: string): Observable<AuthResponseData> {
+    return this.http
+      .post<AuthResponseData>(
+        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.FIRBASE_API_KEY}`,
+        {
+          email,
+          password,
+          returnSecureToken: true,
+        }
+      )
+      .pipe(
+        delay(3000),
+        tap((data) => console.log(data))
+      );
+    // return of('request data base').pipe(delay(3000));
+    // return of('requet data base');
+  }
 
   formatUser(data: AuthResponseData) {
     const expirationDate = new Date(
@@ -59,6 +76,8 @@ export class AuthService {
         return 'invalid password.';
       case 'USER_DISABLED':
         return 'User disabled.';
+      case 'EMAIL_EXISTS':
+        return 'The email address is already in use by another account.';
       default:
         return 'Unkonown error occured. Please try again';
     }
