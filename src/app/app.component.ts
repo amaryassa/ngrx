@@ -11,6 +11,7 @@ import { autoLogin } from './auth/state/auth.actions';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+  id: any;
   title = 'ngrx';
   showLoading: Observable<Boolean>;
   errorMessage: Observable<string>;
