@@ -1,16 +1,7 @@
 import { environment } from './../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  takeUntil,
-  timeout,
-  timer,
-  delay,
-  of,
-  Observable,
-  map,
-  tap,
-} from 'rxjs';
+import { delay, Observable, tap } from 'rxjs';
 import { AuthResponseData } from '../models/AuthResponseData.model';
 import { User } from '../models/user.model';
 
@@ -18,6 +9,8 @@ import { User } from '../models/user.model';
   providedIn: 'root',
 })
 export class AuthService {
+  timeoutInterval: any;
+
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<AuthResponseData> {
@@ -81,5 +74,38 @@ export class AuthService {
       default:
         return 'Unkonown error occured. Please try again';
     }
+  }
+  setUserInLocalStorage(user: User) {
+    console.log(user);
+    console.log(JSON.stringify(user));
+    localStorage.setItem('userData', JSON.stringify(user));
+
+    this.runTimeoutInterval(user);
+  }
+  getUserFromLocalStorage() {
+    const userDataString = localStorage.getItem('userData');
+    if (userDataString) {
+      const userData = JSON.parse(userDataString);
+      const expirationDate = new Date(userData.expirationDate);
+      const user = new User(
+        userData.email,
+        userData.token,
+        userData.localId,
+        expirationDate
+      );
+      this.runTimeoutInterval(user);
+      return user;
+    }
+    return null;
+  }
+
+  runTimeoutInterval(user: User) {
+    const todaysDate = new Date().getTime();
+    const expirationDate = user.expireDate.getTime();
+
+    const timeInterval = expirationDate - todaysDate;
+    this.timeoutInterval = setTimeout(() => {
+      // logout fonctionnality
+    }, timeInterval);
   }
 }

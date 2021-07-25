@@ -13,6 +13,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.state';
 import { setLoader, setErrorMessage } from '../../store/shared/shared.actions';
 import { Router } from '@angular/router';
+import { autoLogin } from './auth.actions';
 
 @Injectable()
 export class AuthEffects {
@@ -32,6 +33,7 @@ export class AuthEffects {
           map((data) => {
             this.store.dispatch(setLoader({ status: false }));
             const user = this.authService.formatUser(data);
+            this.authService.setUserInLocalStorage(user);
             return loginSuccess({ user });
           }),
           catchError((errorResponse) => {
@@ -55,6 +57,7 @@ export class AuthEffects {
           map((data) => {
             this.store.dispatch(setLoader({ status: false }));
             const user = this.authService.formatUser(data);
+            this.authService.setUserInLocalStorage(user);
             return signupSuccess({ user });
           }),
           catchError((errorResponse) => {
@@ -74,6 +77,22 @@ export class AuthEffects {
         ofType(...[loginSuccess, signupSuccess]),
         tap((action) => {
           this.router.navigate(['/']);
+        })
+      );
+    },
+    { dispatch: false }
+  );
+
+  autoLogin$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(autoLogin),
+        tap((action) => {
+          const user = this.authService.getUserFromLocalStorage();
+          console.log('jsk');
+          console.log(user);
+
+          // return null;
         })
       );
     },
