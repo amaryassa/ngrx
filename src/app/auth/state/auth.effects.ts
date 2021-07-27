@@ -32,7 +32,6 @@ export class AuthEffects {
         return this.authService.login(action.email, action.password).pipe(
           // delay(3000),
           map((data) => {
-            this.store.dispatch(setLoader({ status: false }));
             const user = this.authService.formatUser(data);
             this.authService.setUserInLocalStorage(user);
             return loginSuccess({ user, redirect: true });
@@ -55,7 +54,6 @@ export class AuthEffects {
         return this.authService.signup(action.email, action.password).pipe(
           // delay(3000),
           map((data) => {
-            this.store.dispatch(setLoader({ status: false }));
             const user = this.authService.formatUser(data);
             this.authService.setUserInLocalStorage(user);
             return signupSuccess({ user, redirect: true });
@@ -76,7 +74,8 @@ export class AuthEffects {
       return this.actions$.pipe(
         ofType(...[loginSuccess, signupSuccess]),
         tap((action) => {
-          if (action.redirect) this.router.navigate(['/']);
+          this.store.dispatch(setLoader({ status: false }));
+          // if (action.redirect) this.router.navigate(['/']);
         })
       );
     },

@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterContentChecked,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppState } from './store/app.state';
@@ -10,13 +15,16 @@ import { autoLogin } from './auth/state/auth.actions';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterContentChecked {
   id: any;
   title = 'ngrx';
   showLoading: Observable<Boolean>;
   errorMessage: Observable<string>;
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppState>, private ref: ChangeDetectorRef) {}
+  ngAfterContentChecked() {
+    // this.ref.detectChanges();
+  }
   ngOnInit() {
     this.showLoading = this.store.select(getLoading);
     this.errorMessage = this.store.select(getErrorMessage);

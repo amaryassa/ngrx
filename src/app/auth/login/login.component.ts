@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   onLoginSubmit() {
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
-    this.store.dispatch(setLoader({ status: true }));
+    // this.store.dispatch(setLoader({ status: true }));
     this.store.dispatch(loginStart({ email, password }));
   }
   // convenience getter for easy access to form fields

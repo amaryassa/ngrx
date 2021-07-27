@@ -1,18 +1,25 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { addPost, deletePost, updatePost } from './posts.actions';
+import { loadPostsSuccess, updatePostSuccess } from './posts.actions';
 import { initialState, PostsState } from './posts.state';
+import { addPostSuccess, deletePostSuccess } from './posts.actions';
 
 const _postsReducer = createReducer(
   initialState,
-  on(addPost, (state, action) => {
+  on(loadPostsSuccess, (state, action) => {
+    console.log('on est là)');
+    return {
+      ...state,
+      posts: action.posts,
+    };
+  }),
+  on(addPostSuccess, (state, action) => {
     let post = { ...action.post };
-    post.id = state.posts.length + 1;
     return {
       ...state,
       posts: [...state.posts, post],
     };
   }),
-  on(updatePost, (state, action) => {
+  on(updatePostSuccess, (state, action) => {
     const id = action.post.id;
     let updatedPosts = [...state.posts];
     const indexOfUpdate = updatedPosts.findIndex((post) => post.id == id);
@@ -27,8 +34,7 @@ const _postsReducer = createReducer(
       posts: [...updatedPosts],
     };
   }),
-  on(deletePost, (state, action) => {
-    console.log('jsk');
+  on(deletePostSuccess, (state, action) => {
     const updatedPosts = state.posts.filter((post) => post.id != action.id);
     return {
       ...state,
