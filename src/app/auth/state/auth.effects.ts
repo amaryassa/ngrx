@@ -75,7 +75,7 @@ export class AuthEffects {
         ofType(...[loginSuccess, signupSuccess]),
         tap((action) => {
           this.store.dispatch(setLoader({ status: false }));
-          // if (action.redirect) this.router.navigate(['/']);
+          if (action.redirect) this.router.navigate(['/']);
         })
       );
     },

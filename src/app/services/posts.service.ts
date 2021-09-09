@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Post } from '../models/Post.model';
 import { Observable, tap, delay, exhaustAll, map } from 'rxjs';
-// const BASE_URL = 'http://localhost:3000';
-// const URL_POSTS = `${BASE_URL}/posts`;
-const BASE_URL = 'https://ng-test-b9633.firebaseio.com';
-const URL_POSTS = `${BASE_URL}/posts.json`;
+const BASE_URL = 'http://localhost:3000';
+const URL_POSTS = `${BASE_URL}/posts`;
+// const BASE_URL = 'https://ng-test-b9633.firebaseio.com';
+// const URL_POSTS = `${BASE_URL}/posts.json`;
 @Injectable({
   providedIn: 'root',
 })
 export class PostsService {
   constructor(private http: HttpClient) {}
-  getPosts(): Observable<Post[]> {
+  _getPosts(): Observable<Post[]> {
     return this.http.get<Post[]>(URL_POSTS).pipe(
       map((data) => {
         const posts: Post[] = [];
@@ -23,14 +23,14 @@ export class PostsService {
     );
   }
 
-  updatePost(post: Post) {
+  _updatePost(post: Post) {
     const postData = {
       [post.id]: { title: post.title, description: post.description },
     };
     return this.http.patch(URL_POSTS, postData);
   }
 
-  _getPosts(): Observable<Post[] | []> {
+  getPosts(): Observable<Post[] | []> {
     return this.http.get<Post[]>(URL_POSTS).pipe(
       // delay(1500),
       tap((data) => console.log(data))
@@ -43,7 +43,7 @@ export class PostsService {
       tap((data) => console.log(data))
     );
   }
-  _updatePost(post: Post) {
+  updatePost(post: Post) {
     console.log(post);
     return this.http.put<Post>(`${URL_POSTS}/${post.id}`, post).pipe(
       delay(1500),
