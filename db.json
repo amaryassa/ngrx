@@ -2,12 +2,12 @@
   "posts": [
     {
       "id": 1,
-      "title": "titre 01 ",
+      "title": "titre 01",
       "description": "description 01"
     },
     {
       "id": 2,
-      "title": "titre 02 ",
+      "title": "titre 02",
       "description": "description 02"
     },
     {

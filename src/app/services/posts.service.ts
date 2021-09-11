@@ -44,7 +44,7 @@ export class PostsService {
     );
   }
   updatePost(post: Post) {
-    console.log(post);
+    // console.log(post);
     return this.http.put<Post>(`${URL_POSTS}/${post.id}`, post).pipe(
       delay(1500),
       tap((data) => console.log(data))
@@ -55,5 +55,10 @@ export class PostsService {
       delay(1500),
       tap((data) => console.log(data))
     );
+  }
+
+  getPostById(id: string): Observable<Post> {
+    console.log('getPostById Service');
+    return this.http.get<Post>(`${URL_POSTS}/${id}`);
   }
 }

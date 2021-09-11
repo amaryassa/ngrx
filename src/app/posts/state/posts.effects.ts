@@ -8,17 +8,32 @@ import {
   addPost,
   addPostSuccess,
 } from './posts.actions';
-import { mergeMap, of, tap, map, catchError, exhaustMap } from 'rxjs';
+import {
+  mergeMap,
+  of,
+  tap,
+  map,
+  catchError,
+  exhaustMap,
+  filter,
+  switchMap,
+} from 'rxjs';
 import { AppState } from '../../store/app.state';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { setLoader, setErrorMessage } from '../../store/shared/shared.actions';
+import { getPostById } from './posts.selector';
 import {
   updatePost,
   updatePostSuccess,
   deletePost,
   deletePostSuccess,
 } from './posts.actions';
+import {
+  RouterNavigatedAction,
+  routerNavigatedAction,
+  ROUTER_NAVIGATION,
+} from '@ngrx/router-store';
 
 @Injectable({
   providedIn: 'root',
@@ -90,6 +105,29 @@ export class PostsEffects {
           map((id) => {
             console.log(action.id);
             return deletePostSuccess({ id: action.id });
+          })
+        );
+      })
+    );
+  });
+
+  getSinglePost$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ROUTER_NAVIGATION),
+      filter((r: RouterNavigatedAction) => {
+        console.log('ROUTER_NAVIGATION Filter');
+        return r.payload.routerState.url.startsWith('/posts/details');
+      }),
+      map((r: RouterNavigatedAction | any) => {
+        console.log('ROUTER_NAVIGATION MAP');
+        return r.payload.routerState['params']['id'];
+      }),
+      switchMap((id) => {
+        return this.postsService.getPostById(id).pipe(
+          map((post) => {
+            console.log('post', post);
+            // const postData = [{ ...post, id }];
+            return loadPostsSuccess({ posts: [post] });
           })
         );
       })
