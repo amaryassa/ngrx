@@ -19,6 +19,7 @@ export class PostsListComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(loadPosts());
     this.posts$ = this.store.select(getPosts);
+    // this.posts$.subscribe((res) => console.log('jsk', res));
     this.count = this.store.select(getCount);
   }
 

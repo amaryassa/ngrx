@@ -46,7 +46,5 @@ export function counterReducer(
   state: CounterState | undefined,
   action: Action
 ) {
-  console.log('action', action);
-
   return _counterReducer(state, action);
 }

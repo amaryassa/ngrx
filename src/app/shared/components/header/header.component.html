@@ -29,6 +29,9 @@
         <li class="nav-item">
           <a class="nav-link" href="#" [routerLink]="['/posts']">Posts</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" [routerLink]="['/clients']">Clients</a>
+        </li>
         <li class="nav-item" *ngIf="!(isAuthenticated | async)">
           <a class="nav-link" href="#" [routerLink]="['/auth']">Login</a>
         </li>

@@ -56,6 +56,23 @@
       "description": "description 11"
     }
   ],
+  "clients": [
+    {
+      "id": 1,
+      "nom": "nom 01",
+      "prenom": "prenom 01"
+    },
+    {
+      "id": 2,
+      "nom": "nom 02",
+      "prenom": "prenom 02"
+    },
+    {
+      "id": 3,
+      "nom": "nom 03",
+      "prenom": "prenom 03"
+    }
+  ],
   "counter": {
     "counter": 0
   }

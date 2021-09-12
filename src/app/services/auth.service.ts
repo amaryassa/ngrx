@@ -79,8 +79,6 @@ export class AuthService {
     }
   }
   setUserInLocalStorage(user: User) {
-    console.log(user);
-    console.log(JSON.stringify(user));
     localStorage.setItem('userData', JSON.stringify(user));
 
     this.runTimeoutInterval(user);

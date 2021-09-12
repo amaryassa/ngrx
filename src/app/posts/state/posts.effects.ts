@@ -23,6 +23,8 @@ import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { setLoader, setErrorMessage } from '../../store/shared/shared.actions';
 import { getPostById } from './posts.selector';
+import { Update } from '@ngrx/entity';
+import { Post } from 'src/app/models/Post.model';
 import {
   updatePost,
   updatePostSuccess,
@@ -39,12 +41,7 @@ import {
   providedIn: 'root',
 })
 export class PostsEffects {
-  constructor(
-    private actions$: Actions,
-    private postsService: PostsService,
-    private store: Store<AppState>,
-    private router: Router
-  ) {}
+  constructor(private actions$: Actions, private postsService: PostsService) {}
 
   loadPosts$ = createEffect(
     () => {
@@ -56,7 +53,6 @@ export class PostsEffects {
               return loadPostsSuccess({ posts: data });
             }),
             catchError((errorResponse) => {
-              console.log(errorResponse);
               return of(
                 setErrorMessage({
                   message: errorResponse?.message ?? 'Error occured',
@@ -90,7 +86,11 @@ export class PostsEffects {
       exhaustMap((action) => {
         return this.postsService.updatePost(action.post).pipe(
           map((post) => {
-            return updatePostSuccess({ post: action.post });
+            const updatedPost: Update<Post> = {
+              id: post.id,
+              changes: { ...post },
+            };
+            return updatePostSuccess({ post: updatedPost });
             // return updatePostSuccess({ post });
           })
         );
@@ -103,7 +103,6 @@ export class PostsEffects {
       exhaustMap((action) => {
         return this.postsService.deletePost(action.id).pipe(
           map((id) => {
-            console.log(action.id);
             return deletePostSuccess({ id: action.id });
           })
         );
@@ -115,17 +114,14 @@ export class PostsEffects {
     return this.actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigatedAction) => {
-        console.log('ROUTER_NAVIGATION Filter');
         return r.payload.routerState.url.startsWith('/posts/details');
       }),
       map((r: RouterNavigatedAction | any) => {
-        console.log('ROUTER_NAVIGATION MAP');
         return r.payload.routerState['params']['id'];
       }),
       switchMap((id) => {
         return this.postsService.getPostById(id).pipe(
           map((post) => {
-            console.log('post', post);
             // const postData = [{ ...post, id }];
             return loadPostsSuccess({ posts: [post] });
           })
@@ -139,7 +135,6 @@ export class PostsEffects {
   //     return this.actions$.pipe(
   //       ofType(...[loadPosts, addPost]),
   //       map((action) => {
-  //         console.log('action', action);
   //         return setLoader({ status: true });
   //       })
   //     );
@@ -151,7 +146,6 @@ export class PostsEffects {
   //     return this.actions$.pipe(
   //       ofType(...[loadPostsSuccess, addPostSuccess]),
   //       map((action) => {
-  //         console.log('action', action);
   //         return setLoader({ status: false });
   //       })
   //     );

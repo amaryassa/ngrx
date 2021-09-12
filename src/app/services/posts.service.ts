@@ -31,34 +31,41 @@ export class PostsService {
   }
 
   getPosts(): Observable<Post[] | []> {
-    return this.http.get<Post[]>(URL_POSTS).pipe(
+    return this.http
+      .get<Post[]>(URL_POSTS)
+      .pipe
       // delay(1500),
-      tap((data) => console.log(data))
-    );
+      // tap((data) => console.log(data))
+      ();
   }
 
   addPost(post: Post) {
-    return this.http.post<Post>(URL_POSTS, post).pipe(
+    return this.http
+      .post<Post>(URL_POSTS, post)
+      .pipe
       // delay(1500),
-      tap((data) => console.log(data))
-    );
+      // tap((data) => console.log(data))
+      ();
   }
   updatePost(post: Post) {
     // console.log(post);
-    return this.http.put<Post>(`${URL_POSTS}/${post.id}`, post).pipe(
-      delay(1500),
-      tap((data) => console.log(data))
-    );
+    return this.http
+      .put<Post>(`${URL_POSTS}/${post.id}`, post)
+      .pipe
+      // delay(1500)
+      // tap((data) => console.log(data))
+      ();
   }
   deletePost(id: string | number) {
-    return this.http.delete<Post>(`${URL_POSTS}/${id}`).pipe(
-      delay(1500),
-      tap((data) => console.log(data))
-    );
+    return this.http
+      .delete<Post>(`${URL_POSTS}/${id}`)
+      .pipe
+      // delay(1500)
+      // tap((data) => console.log(data))
+      ();
   }
 
   getPostById(id: string): Observable<Post> {
-    console.log('getPostById Service');
     return this.http.get<Post>(`${URL_POSTS}/${id}`);
   }
 }

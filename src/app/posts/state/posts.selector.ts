@@ -1,25 +1,33 @@
-import { PostsState } from './posts.state';
+import { PostsState, postsAdapter } from './posts.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { Post } from 'src/app/models/Post.model';
 import { getCurrentRoute } from '../../store/router/router.selector';
 import { RouterStateUrl } from '../../store/router/custom-serializer';
-import { Observable } from 'rxjs';
+import { Dictionary } from '@ngrx/entity';
 export const POST_STATE_NAME = 'postsState';
+
+export const postSelectors = postsAdapter.getSelectors();
 
 const getPostsState = createFeatureSelector<PostsState>(POST_STATE_NAME);
 
-export const getPosts = createSelector(getPostsState, (state) => {
-  return state.posts;
-});
-export const getPostById = () =>
-  createSelector(
-    getPosts,
-    getCurrentRoute,
-    (posts: Post[], route: RouterStateUrl) => {
-      return posts ? posts.find((post) => post.id == route.params['id']) : null;
-    }
-  );
+export const getPosts = createSelector(getPostsState, postSelectors.selectAll);
+export const getPostsEntities = createSelector(
+  getPostsState,
+  postSelectors.selectEntities
+);
 
-export const getCount = createSelector(getPostsState, (state) => {
-  return state?.posts?.length || 0;
-});
+export const getPostById = createSelector(
+  getPostsEntities,
+  getCurrentRoute,
+  (posts: Dictionary<Post>, route: RouterStateUrl) => {
+    return posts ? posts[route.params['id']] : null;
+  }
+);
+
+// export const getCount = createSelector(getPostsState, (state) => {
+//   return postSelectors.selectAll.length || 2;
+// });
+export const getCount = createSelector(
+  getPostsState,
+  postSelectors.selectTotal
+);

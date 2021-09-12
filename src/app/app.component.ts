@@ -23,7 +23,7 @@ export class AppComponent implements OnInit, AfterContentChecked {
 
   constructor(private store: Store<AppState>, private ref: ChangeDetectorRef) {}
   ngAfterContentChecked() {
-    // this.ref.detectChanges();
+    this.ref.detectChanges();
   }
   ngOnInit() {
     this.showLoading = this.store.select(getLoading);

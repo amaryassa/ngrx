@@ -1,3 +1,4 @@
+import { Update } from '@ngrx/entity';
 import { createAction, props } from '@ngrx/store';
 import { Post } from 'src/app/models/Post.model';
 
@@ -30,7 +31,7 @@ export const updatePost = createAction(
 );
 export const updatePostSuccess = createAction(
   UPDATE_POST_SUCCESS,
-  props<{ post: Post }>()
+  props<{ post: Update<Post> }>()
 );
 
 export const deletePost = createAction(

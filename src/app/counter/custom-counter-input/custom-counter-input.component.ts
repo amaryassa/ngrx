@@ -19,7 +19,6 @@ export class CustomCounterInputComponent implements OnInit {
 
   ngOnInit(): void {
     // this.store.select('counter').subscribe((data) => {
-    //   console.log('Channel Name Observable called');
     //   this.channelName = data.channelName;
     // });
     this.channelName$ = this.store.select(getChannelName);

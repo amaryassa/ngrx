@@ -16,6 +16,6 @@ export class SinglePostComponent implements OnInit {
   constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.post = this.store.select(getPostById());
+    this.post = this.store.select(getPostById);
   }
 }
