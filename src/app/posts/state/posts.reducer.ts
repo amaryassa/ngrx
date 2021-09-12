@@ -9,7 +9,10 @@ const _postsReducer = createReducer(
     return postsAdapter.setAll(action.posts, state);
   }),
   on(addPostSuccess, (state, action) => {
-    return postsAdapter.addOne(action.post, state);
+    return postsAdapter.addOne(action.post, {
+      ...state,
+      compteurTest: state.compteurTest + 1,
+    });
   }),
   on(deletePostSuccess, (state, { id }) => {
     return postsAdapter.removeOne(String(id), state);
