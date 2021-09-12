@@ -17,12 +17,17 @@ import {
   exhaustMap,
   filter,
   switchMap,
+  withLatestFrom,
 } from 'rxjs';
 import { AppState } from '../../store/app.state';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { setLoader, setErrorMessage } from '../../store/shared/shared.actions';
-import { getPostById } from './posts.selector';
+import {
+  setLoader,
+  setErrorMessage,
+  dummyAction,
+} from '../../store/shared/shared.actions';
+import { getPostById, getPosts, getCount } from './posts.selector';
 import { Update } from '@ngrx/entity';
 import { Post } from 'src/app/models/Post.model';
 import {
@@ -41,25 +46,34 @@ import {
   providedIn: 'root',
 })
 export class PostsEffects {
-  constructor(private actions$: Actions, private postsService: PostsService) {}
+  constructor(
+    private actions$: Actions,
+    private postsService: PostsService,
+    private store: Store<AppState>
+  ) {}
 
   loadPosts$ = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(loadPosts),
-        mergeMap((action) => {
-          return this.postsService.getPosts().pipe(
-            map((data) => {
-              return loadPostsSuccess({ posts: data });
-            }),
-            catchError((errorResponse) => {
-              return of(
-                setErrorMessage({
-                  message: errorResponse?.message ?? 'Error occured',
-                })
-              );
-            })
-          );
+        withLatestFrom(this.store.select(getCount)),
+        mergeMap(([action, countPosts]) => {
+          //éviter les appels http qui ne sont pas nécessaire
+          if (countPosts <= 1) {
+            return this.postsService.getPosts().pipe(
+              map((data) => {
+                return loadPostsSuccess({ posts: data });
+              }),
+              catchError((errorResponse) => {
+                return of(
+                  setErrorMessage({
+                    message: errorResponse?.message ?? 'Error occured',
+                  })
+                );
+              })
+            );
+          }
+          return of(dummyAction());
         })
       );
     },
@@ -91,7 +105,6 @@ export class PostsEffects {
               changes: { ...post },
             };
             return updatePostSuccess({ post: updatedPost });
-            // return updatePostSuccess({ post });
           })
         );
       })
@@ -119,13 +132,17 @@ export class PostsEffects {
       map((r: RouterNavigatedAction | any) => {
         return r.payload.routerState['params']['id'];
       }),
-      switchMap((id) => {
-        return this.postsService.getPostById(id).pipe(
-          map((post) => {
-            // const postData = [{ ...post, id }];
-            return loadPostsSuccess({ posts: [post] });
-          })
-        );
+      withLatestFrom(this.store.select(getPosts)),
+      switchMap(([id, posts]) => {
+        if (!posts.length) {
+          return this.postsService.getPostById(id).pipe(
+            map((post) => {
+              // const postData = [{ ...post, id }];
+              return loadPostsSuccess({ posts: [post] });
+            })
+          );
+        }
+        return of(dummyAction());
       })
     );
   });

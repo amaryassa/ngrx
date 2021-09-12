@@ -24,9 +24,14 @@ export const getPostById = createSelector(
   }
 );
 
-// export const getCount = createSelector(getPostsState, (state) => {
-//   return postSelectors.selectAll.length || 2;
-// });
+// export const getPostById = () =>
+// createSelector(
+//   getPostsEntities,
+//   getCurrentRoute,
+//   (posts: Dictionary<Post>, route: RouterStateUrl) => {
+//     return posts ? posts[route.params['id']] : null;
+//   }
+// );
 export const getCount = createSelector(
   getPostsState,
   postSelectors.selectTotal
