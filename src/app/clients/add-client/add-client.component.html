@@ -1,1 +1,40 @@
-<p>add-client works!</p>
+<div class="row">
+  <div class="col-md-12">
+    <h3>Add Client</h3>
+    <hr />
+    <form [formGroup]="clientForm" (ngSubmit)="onAddClient()">
+      <div class="mb-3">
+        <label>nom</label>
+        <input type="text" class="form-control" formControlName="nom" />
+        <div
+          *ngIf="
+            clientForm.get('nom')?.touched && !clientForm.get('nom')?.valid
+          "
+        >
+          <div *ngIf="clientForm.get('nom')?.errors?.required">
+            nom is required
+          </div>
+          <div *ngIf="clientForm.get('nom')?.errors?.minlength">
+            nom should be minimum 6 characters
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label>Prenom</label>
+        <textarea class="form-control" formControlName="prenom"></textarea>
+
+        <div>{{ showPrenomErrors() }}</div>
+      </div>
+
+      <div class="my-3">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!clientForm.valid"
+        >
+          Add Client
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

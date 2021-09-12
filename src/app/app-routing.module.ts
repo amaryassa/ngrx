@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './services/auth.guard';
 import { SinglePostComponent } from './posts/single-post/single-post.component';
+import { SingleClientComponent } from './clients/single-client/single-client.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,10 @@ const routes: Routes = [
     path: 'clients',
     loadChildren: () =>
       import('./clients/clients.module').then((m) => m.ClientModule),
+  },
+  {
+    path: 'clients/details/:id',
+    component: SingleClientComponent,
   },
 ];
 

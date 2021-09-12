@@ -22,7 +22,7 @@ export class ClientsService {
       .post<Client>(URL_CLIENTS, client)
       .pipe(tap((data) => console.log(data)));
   }
-  updatePost(client: Client) {
+  updateClient(client: Client) {
     return this.http
       .put<Client>(`${URL_CLIENTS}/${client.id}`, client)
       .pipe(tap((data) => console.log(data)));

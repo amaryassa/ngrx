@@ -1,5 +1,50 @@
-<p>clients-list works!</p>
-<pre>
+<div class="row">
+  <div class="col-md-8">
+    <h3>clients List ({{ count | async }})</h3>
 
-  {{ this.clients$ | async | json }}
-</pre>
+    <div>
+      <a href="#" class="btn btn-primary" [routerLink]="['/clients/add']"
+        >Add client</a
+      >
+    </div>
+
+    <table class="table table-striped" *ngIf="clients$ | async as clientsData">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let client of clientsData">
+          <td>{{ client.id }}</td>
+          <td style="word-break: break-all">{{ client.nom }}</td>
+          <td style="word-break: break-all">{{ client.prenom }}</td>
+          <td>
+            <a
+              href=""
+              class="btn btn-primary"
+              [routerLink]="['edit', client.id]"
+              >Update </a
+            >&nbsp;
+            <button class="btn btn-danger" (click)="onDeleteClient(client.id)">
+              Delete</button
+            >&nbsp;
+            <a
+              href=""
+              class="btn btn-info"
+              [routerLink]="['details', client.id]"
+              >Details
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-md-4">
+    <router-outlet></router-outlet>
+  </div>
+</div>
