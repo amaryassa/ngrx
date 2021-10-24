@@ -1,7 +1,13 @@
 <h1>PostDetails</h1>
-<div *ngIf="post | async as postData">
+<div *ngIf="post | async as postData; else contentElse">
   <div>Id: {{ postData.id }}</div>
   <div>Title: {{ postData.title }}</div>
   <div>Description: {{ postData.description }}</div>
 </div>
+<ng-template #contentElse
+  ><h5 class="text-danger">
+    Le post avec l'id {{ id }} n'existe pas
+  </h5></ng-template
+>
+
 <div><a [routerLink]="['/posts']">Back to posts</a></div>

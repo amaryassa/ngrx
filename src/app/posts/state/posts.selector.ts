@@ -11,6 +11,7 @@ export const postSelectors = postsAdapter.getSelectors();
 const getPostsState = createFeatureSelector<PostsState>(POST_STATE_NAME);
 
 export const getPosts = createSelector(getPostsState, postSelectors.selectAll);
+
 export const getPostsEntities = createSelector(
   getPostsState,
   postSelectors.selectEntities

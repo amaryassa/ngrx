@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Client } from '../models/Client.model';
-import { Observable, tap, delay, exhaustAll, map } from 'rxjs';
+import { Observable, throwError, catchError } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
+
 const BASE_URL = 'http://localhost:3000';
 const URL_CLIENTS = `${BASE_URL}/clients`;
 
@@ -12,9 +14,12 @@ export class ClientsService {
   constructor(private http: HttpClient) {}
 
   getClients(): Observable<Client[] | []> {
-    return this.http
-      .get<Client[]>(URL_CLIENTS)
-      .pipe(tap((data) => console.log(data)));
+    return this.http.get<Client[]>(URL_CLIENTS).pipe(
+      tap((data) => console.log(data)),
+      catchError((err: HttpErrorResponse) => {
+        return throwError(() => err.message);
+      })
+    );
   }
 
   addClient(client: Client) {

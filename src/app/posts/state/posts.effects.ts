@@ -2,12 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PostsService } from '../../services/posts.service';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import {
-  loadPosts,
-  loadPostsSuccess,
-  addPost,
-  addPostSuccess,
-} from './posts.actions';
+
 import {
   mergeMap,
   of,
@@ -18,6 +13,7 @@ import {
   filter,
   switchMap,
   withLatestFrom,
+  EMPTY,
 } from 'rxjs';
 import { AppState } from '../../store/app.state';
 import { Store } from '@ngrx/store';
@@ -31,6 +27,10 @@ import { getPostById, getPosts, getCount } from './posts.selector';
 import { Update } from '@ngrx/entity';
 import { Post } from 'src/app/models/Post.model';
 import {
+  loadPosts,
+  loadPostsSuccess,
+  addPost,
+  addPostSuccess,
   updatePost,
   updatePostSuccess,
   deletePost,
@@ -139,34 +139,52 @@ export class PostsEffects {
             map((post) => {
               // const postData = [{ ...post, id }];
               return loadPostsSuccess({ posts: [post] });
+            }),
+            catchError((errorResponse) => {
+              return of(
+                setErrorMessage({
+                  message:
+                    (errorResponse?.status == '404'
+                      ? `Status : ${errorResponse?.status} : ${errorResponse?.statusText}`
+                      : errorResponse?.message) ?? 'Error occured',
+                })
+              );
             })
           );
         }
-        return of(dummyAction());
+        return EMPTY;
       })
     );
   });
 
-  // request$ = createEffect(
-  //   () => {
-  //     return this.actions$.pipe(
-  //       ofType(...[loadPosts, addPost]),
-  //       map((action) => {
-  //         return setLoader({ status: true });
-  //       })
-  //     );
-  //   },
-  //   { dispatch: true }
-  // );
-  // success$ = createEffect(
-  //   () => {
-  //     return this.actions$.pipe(
-  //       ofType(...[loadPostsSuccess, addPostSuccess]),
-  //       map((action) => {
-  //         return setLoader({ status: false });
-  //       })
-  //     );
-  //   },
-  //   { dispatch: true }
-  // );
+  request$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(...[loadPosts, addPost, updatePost, deletePost]),
+        map((action) => {
+          return setLoader({ status: true });
+        })
+      );
+    },
+    { dispatch: true }
+  );
+  success$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(
+          ...[
+            loadPostsSuccess,
+            addPostSuccess,
+            updatePostSuccess,
+            deletePostSuccess,
+            dummyAction,
+          ]
+        ),
+        map((action) => {
+          return setLoader({ status: false });
+        })
+      );
+    },
+    { dispatch: true }
+  );
 }

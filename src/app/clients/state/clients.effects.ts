@@ -38,9 +38,10 @@ export class ClientsEffects {
               return loadClientsSuccess({ clients: data });
             }),
             catchError((errorResponse) => {
+              console.log('erreur', errorResponse);
               return of(
                 setErrorMessage({
-                  message: errorResponse?.message ?? 'Error occured',
+                  message: errorResponse ?? 'Error occured',
                 })
               );
             })

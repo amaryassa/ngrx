@@ -11,6 +11,7 @@ import { StoreModule } from '@ngrx/store';
 import { clientsReducer } from './state/clients.reducer';
 import { ClientsEffects } from './state/clients.effects';
 import { EffectsModule } from '@ngrx/effects';
+import { HttpClientModule } from '@angular/common/http';
 const routes: Routes = [
   {
     path: '',
